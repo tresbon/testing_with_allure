@@ -27,50 +27,45 @@ laguages_list = get_langs()
 
 def pytest_addoption(parser):
 
-    parser.addoption('--browser_name', action='store', default='chrome',
+    parser.addoption('--browser', action='store', default='chrome',
                      help="Choose browser: chrome or firefox")
 
     parser.addoption('--language', action='store', default='en',
                      help="Choose language")
-    
-    parser.addoption('--product_page', action='store',
-                    default='http://selenium1py.pythonanywhere.com/' + \
-                        'en-gb/catalogue/the-city-and-the-stars_95/',
-                     help="Choose_product_link")
 
 @pytest.fixture(scope="function")
-def browser(request):
+def driver(request):
 
-    browser_name = request.config.getoption("browser_name")
+    browser = request.config.getoption("browser")
 
     lang = request.config.getoption("language")
 
-    browser = None
+    driver = None
 
-    if browser_name == "chrome":
+    if browser.lower() == "chrome":
         print("\nstart chrome browser for test..")
         #Подлкючить языковые опции в хром
         options = Options()
         options.add_experimental_option('prefs', {'intl.accept_languages': lang})
-        browser = webdriver.Chrome()
-        browser.maximize_window()
+        driver = webdriver.Chrome()
+        driver.maximize_window()
 
-    elif browser_name == "firefox":
+    elif browser.lower() == "firefox":
         print("\nstart firefox browser for test..")
         #Подключить языковые опции в Firefox
         fp = webdriver.FirefoxProfile()
         fp.set_preference("intl.accept_languages", lang)
-        browser = webdriver.Firefox()
-        browser.maximize_window()
+        driver = webdriver.Firefox()
+        driver.maximize_window()
 
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")
 
-    yield browser
+    yield driver
 
     print("\nquit browser..")
 
-    browser.quit()
+    driver.quit()
 
 @pytest.fixture(scope="function")
 def lang(request):
@@ -82,11 +77,3 @@ def lang(request):
         
     else:
         return f'--language should by one of {laguages_list}'
-
-@pytest.fixture(scope="function")
-def push_by(request):
-    return By
-
-@pytest.fixture(scope="function")
-def product_link(request):
-    return request.config.getoption("product_page")

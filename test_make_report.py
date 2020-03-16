@@ -21,29 +21,29 @@ def generate_pass(nletters:int,ndigits:int):
 mail = generate_mail()
 password = generate_pass(5,4)
 
-def test_user_see_greeting_message(browser):
-    browser.get('http://selenium1py.pythonanywhere.com/ru/')
+def test_user_see_greeting_message(driver):
+    driver.get('http://selenium1py.pythonanywhere.com/ru/')
 
-    l_link = browser.find_element_by_css_selector('a#login_link')
+    l_link = driver.find_element_by_css_selector('a#login_link')
     l_link.click()
 
-    email = WebDriverWait(browser, 5).until(
+    email = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, \
             "#id_registration-email"))
     )
     email.send_keys(mail)
 
-    pass1 = browser.find_element_by_css_selector('#id_registration-password1')
+    pass1 = driver.find_element_by_css_selector('#id_registration-password1')
     pass1.send_keys(password)
 
-    pass2 = browser.find_element_by_css_selector('#id_registration-password2')
+    pass2 = driver.find_element_by_css_selector('#id_registration-password2')
     pass2.send_keys(password)
 
-    button = browser.find_element_by_css_selector(\
+    button = driver.find_element_by_css_selector(\
         "form#register_form button[name='registration_submit']")
     button.click()
 
-    success_message = WebDriverWait(browser, 5).until(
+    success_message = WebDriverWait(driver, 5).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, \
             "div#messages div.alertinner.wicon"))
     )

@@ -1,0 +1,5 @@
+
+start chrome browser for test..
+Test #1 Sing Up passed
+
+quit browser..
